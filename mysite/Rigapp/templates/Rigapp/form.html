@@ -1,0 +1,45 @@
+<html>
+<Title> User upload form </Title>
+{% load staticfiles %}
+<!-- Form starts -->
+<!-- csrf token prevents cross site attacks, imgupload is the page called on submit-->
+    <form action = "{% url 'imgupload' %}" method = "post" enctype="multipart/form-data">{% csrf_token %}
+<!-- User enters text that they want stored with the image in form-->
+    <input type="text" name = "description" rows = "1" cols = "40">
+    Image Description
+    </input>
+    <br><br><br>
+<!-- Enables user to input images-->
+    <input type = "file" name ="usr_image"> Image: </input>
+    <br><br><br>
+<!-- Enables the user to submit the form-->
+    <button type = "submit" value ="upload"> Enter </button>
+    </form>
+
+{% for data in list %}
+<!-- Checks for data in list and iterates the number of times data is present-->
+    <table>
+        <tr><!-- Enables users to print data in one row -->
+            <td><img src = "{{ data.usr_image.url }}"></td>
+            <td> {{ data.description }} </td>
+        </tr>
+    </table>
+{% endfor %}
+<!-- implementing pagination -->
+<div class="pagination">
+    <span class="step-links">
+<!-- It checks whether there is previous page to the current active page-->
+        {% if list.has_previous %}
+            <a href="?page={{ list.previous_page_number }}">previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ list.number }} of {{ list.paginator.num_pages }}.
+        </span>
+<!-- Checks if there is next page or not -->
+        {% if list.has_next %}
+            <a href="?page={{ list.next_page_number }}">next</a>
+        {% endif %}
+    </span>
+</div>
+</html>
